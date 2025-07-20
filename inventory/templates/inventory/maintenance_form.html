@@ -1,0 +1,89 @@
+{% extends 'inventory/base.html' %}
+{% load static %}
+
+{% block title %}{% if title %}{{ title }}{% else %}Maintenance Form{% endif %}{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0">{{ title }} for {{ equipment.name }}</h3>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.date.id_for_label }}" class="form-label">Date</label>
+                                    <div class="form-group">
+                                        <input type="date" class="form-control" id="{{ form.date.id_for_label }}" name="{{ form.date.html_name }}" value="{{ form.date.value|date:'Y-m-d' }}" required>
+                                        {% if form.date.errors %}
+                                            <div class="invalid-feedback d-block">
+                                                {{ form.date.errors }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="{{ form.description.id_for_label }}" class="form-label">Description</label>
+                                    <div class="form-group">
+                                        <textarea class="form-control" id="{{ form.description.id_for_label }}" name="{{ form.description.html_name }}" rows="3">{{ form.description.value }}</textarea>
+                                        {% if form.description.errors %}
+                                            <div class="invalid-feedback d-block">
+                                                {{ form.description.errors }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.performed_by.id_for_label }}" class="form-label">Performed By</label>
+                                    <div class="form-group">
+                                        <select class="form-control" id="{{ form.performed_by.id_for_label }}" name="{{ form.performed_by.html_name }}">
+                                            <option value="">Select user</option>
+                                            {% for user in users %}
+                                                <option value="{{ user.id }}" {% if user.id == form.performed_by.value %}selected{% endif %}>
+                                                    {{ user.get_full_name|default:user.username }}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                        {% if form.performed_by.errors %}
+                                            <div class="invalid-feedback d-block">
+                                                {{ form.performed_by.errors }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="{{ form.cost.id_for_label }}" class="form-label">Cost</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">$</span>
+                                        {{ form.cost }}
+                                        {% if form.cost.errors %}
+                                            <div class="invalid-feedback d-block">
+                                                {{ form.cost.errors }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-end">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Save
+                            </button>
+                            <a href="{% url 'inventory:detail' equipment.pk %}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
