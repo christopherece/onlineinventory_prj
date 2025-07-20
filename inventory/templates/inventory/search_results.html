@@ -1,0 +1,128 @@
+{% extends 'inventory/base.html' %}
+
+{% block title %}Search Results{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2>Search Results for "{{ query }}"</h2>
+        </div>
+    </div>
+
+    {% if query %}
+    <div class="row mb-4">
+        <div class="col-12">
+            <form method="get" class="row g-3">
+                <div class="col-12">
+                    <div class="input-group">
+                        <input type="text" name="q" value="{{ query }}" class="form-control" placeholder="Search...">
+                        <button class="btn btn-outline-secondary" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if not equipment_results.exists and not user_results.exists %}
+    <div class="row">
+        <div class="col-12">
+            <div class="alert alert-info">
+                No results found for "{{ query }}"
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if equipment_results.exists %}
+    <div class="row mb-4">
+        <div class="col-12">
+            <h3>Equipment Results</h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Serial Number</th>
+                        <th>Category</th>
+                        <th>Location</th>
+                        <th>Status</th>
+                        <th>Assigned To</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for equipment in equipment_results %}
+                    <tr>
+                        <td>{{ equipment.name }}</td>
+                        <td>{{ equipment.serial_number }}</td>
+                        <td>{{ equipment.get_category_display }}</td>
+                        <td>{{ equipment.location }}</td>
+                        <td>
+                            <span class="badge {% if equipment.status == 'IN_USE' %}bg-success{% elif equipment.status == 'IN_STOCK' %}bg-info{% elif equipment.status == 'UNDER_REPAIR' %}bg-warning{% elif equipment.status == 'RETIRING' %}bg-info{% else %}bg-danger{% endif %}">
+                                {{ equipment.get_status_display }}
+                            </span>
+                        </td>
+                        <td>
+                            {% if equipment.assigned_user %}
+                                {{ equipment.assigned_user.get_full_name|default:equipment.assigned_user.username }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{% url 'inventory:detail' equipment.pk %}" class="btn btn-outline-primary btn-sm">
+                                <i class="fas fa-eye"></i> View Details
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if user_results.exists %}
+    <div class="row mb-4">
+        <div class="col-12">
+            <h3>User Results</h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Department</th>
+                        <th>Position</th>
+                        <th>Employee ID</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for profile in user_results %}
+                    <tr>
+                        <td>{{ profile.full_name }}</td>
+                        <td>{{ profile.department }}</td>
+                        <td>{{ profile.position }}</td>
+                        <td>{{ profile.employee_id }}</td>
+                        <td>
+                            <a href="{% url 'profiles:detail' username=profile.user.username %}" class="btn btn-outline-primary btn-sm">
+                                <i class="fas fa-eye"></i> View Profile
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
