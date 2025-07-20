@@ -59,17 +59,13 @@
         $(document).ready(function() {
             $('#equipmentTable').DataTable({
                 order: [[0, 'asc']], // Default sort by name
-                pageLength: 10,
-                lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
-                language: {
-                    search: "_INPUT_",
-                    searchPlaceholder: "Search equipment..."
-                },
+                searching: false,     // Disable search box
+                paging: false,        // Disable pagination
+                info: false,          // Disable showing entries info
                 columnDefs: [
                     {
                         targets: [6], // Actions column
-                        orderable: false,
-                        searchable: false
+                        orderable: false
                     }
                 ]
             });
