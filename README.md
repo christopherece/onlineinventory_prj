@@ -1,23 +1,43 @@
 # ICT Inventory Management System
 
-A Django-based inventory management system for tracking ICT equipment and maintenance.
+A Django-based inventory management system for tracking ICT equipment, maintenance, repairs, and user profiles.
 
 ## Features
 
 - Equipment Management:
   - Add, edit, and delete equipment
-  - Track equipment details (serial numbers, asset tags, categories)
+  - Track equipment details (name, serial numbers, asset tags, categories, locations)
   - Assign equipment to users
   - Track purchase prices and warranty information
+  - View detailed equipment history including maintenance and repairs
+  - Search equipment by name, serial number, category, location, or assigned user
+
+- User Profile Management:
+  - Create and edit user profiles
+  - Track user information (full name, department, position, employee ID)
+  - View user profiles with contact information and employment details
+  - Search users by name, department, position, or employee ID
 
 - Maintenance Tracking:
   - Record maintenance activities
   - Track maintenance costs
   - Record maintenance descriptions
   - Track who performed maintenance
+  - View maintenance history for each equipment
 
 - Repair Management:
   - Track repair activities
+  - Record repair costs
+  - Track repair descriptions
+  - Record who performed repairs
+  - View repair history for each equipment
+
+- Search Functionality:
+  - Search across all equipment and user profiles
+  - Search by equipment name, serial number, category, location
+  - Search by user name, department, position, employee ID
+  - Search by assigned user information
+  - View search results in a clean table format
   - Record repair descriptions and costs
   - Track completion status
   - Record who performed repairs
